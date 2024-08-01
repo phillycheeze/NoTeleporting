@@ -17,7 +17,11 @@ Disables teleportation of resources in the following situations:
 
 I have tested this mod with a city of 20k population and it works fine. If you have a larger city, please let me know if you encounter any issues.
 
+## Compatibility
+
 This mod is compatible with mods that change the traffic reduction amount. Those mods will still work for all other kinds of traffic reduction the game has (the amount of people going to work/school/leisure activities etc.).
+
+## Image sources
 
 The thumbnail uses the teleport icon by Lorc licensed under CC BY 3.0 (https://game-icons.net/1x1/lorc/teleport.html).
 	</LongDescription>
@@ -28,7 +32,7 @@ The thumbnail uses the teleport icon by Lorc licensed under CC BY 3.0 (https://g
 	<!--Tag, can be set multiple times-->
 	<Tag Value="" />
 	<!--Link to the forum post where the mod can be discussed-->
-	<ForumLink Value="" />
+	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/no-teleporting.1697702/" />
 	<!--Version of the mod-->
 	<ModVersion Value="1.0" />
 	<!--Recommended version of the base game to use the mod-->
