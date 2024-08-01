@@ -1,0 +1,42 @@
+﻿<Publish>
+	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
+	<ModId Value="" />
+	<!--Name of the mod to display to players-->
+	<DisplayName Value="No Teleporting" />
+	<!--Short description of the mod-->
+	<ShortDescription Value="Disables teleportation of resources" />
+	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
+	<!--LongDescription Value="Disables teleporting of exported cargo" /-->
+	<LongDescription>
+# No teleporting
+
+Disables teleportation of resources in the following situations:
+
+* When resource is traded, traffic reduction is no longer applied, generating a trip for every trade action
+* Companies will no longer spawn with initial resources, requiring them to buy them before they can start producing goods (can be configured in the options with a custom initial resource amount)
+
+I have tested this mod with a city of 20k population and it works fine. If you have a larger city, please let me know if you encounter any issues.
+
+This mod is compatible with mods that change the traffic reduction amount. Those mods will still work for all other kinds of traffic reduction the game has (the amount of people going to work/school/leisure activities etc.).
+	</LongDescription>
+	<!--Thumbnail-->
+	<Thumbnail Value="Properties/Thumbnail.png" />
+	<!--Screenshot, can be set multiple times-->
+	<Screenshot Value="" />
+	<!--Tag, can be set multiple times-->
+	<Tag Value="" />
+	<!--Link to the forum post where the mod can be discussed-->
+	<ForumLink Value="" />
+	<!--Version of the mod-->
+	<ModVersion Value="1.0" />
+	<!--Recommended version of the base game to use the mod-->
+	<GameVersion Value="1.1.7f1" />
+	<!--Dependency for the mod, can be set multiple times-->
+	<Dependency Id="" />
+	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
+	<ChangeLog Value="" />
+	<!--ChangeLog>
+	</ChangeLog-->
+	<!--External link. supported types are discord, github, youtube, twitch, x, paypal, patreon-->
+	<ExternalLink Type="" Url="" />
+</Publish>
