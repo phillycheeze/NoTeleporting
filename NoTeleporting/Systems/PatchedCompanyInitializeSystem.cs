@@ -17,7 +17,9 @@ namespace LeanBusinesses.Systems
 {
     public partial class PatchedCompanyInitializeSystem : GameSystemBase
     {
-        public static int StartingResourceAmount = 0;
+        public static int StartingInputResourceAmount = 0;
+        public static int StartingOutputResourceAmount = 1000;
+        public static int StartingServiceResourceAmount = 0;
 
         [BurstCompile]
         private struct InitializeCompanyJob : IJobChunk
@@ -61,7 +63,13 @@ namespace LeanBusinesses.Systems
             public RandomSeed m_RandomSeed;
 
             [ReadOnly]
-            public int m_StartingResourceAmount;
+            public int m_StartingInputResourceAmount;
+
+            [ReadOnly]
+            public int m_StartingOutputResourceAmount;
+
+            [ReadOnly]
+            public int m_StartingServiceResourceAmount;
 
             public void Execute(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask)
             {
@@ -105,14 +113,14 @@ namespace LeanBusinesses.Systems
                         DynamicBuffer<Resources> buffer = bufferAccessor[i];
                         if (flag)
                         {
-                            AddStartingResources(buffer, industrialProcessData.m_Input1.m_Resource, 3000);
-                            AddStartingResources(buffer, industrialProcessData.m_Input2.m_Resource, 3000);
+                            AddStartingResources(buffer, industrialProcessData.m_Input1.m_Resource, m_StartingServiceResourceAmount);
+                            AddStartingResources(buffer, industrialProcessData.m_Input2.m_Resource, m_StartingServiceResourceAmount);
                             continue;
                         }
-                        AddStartingResources(buffer, industrialProcessData.m_Input1.m_Resource, m_StartingResourceAmount);
-                        AddStartingResources(buffer, industrialProcessData.m_Input2.m_Resource, m_StartingResourceAmount);
+                        AddStartingResources(buffer, industrialProcessData.m_Input1.m_Resource, m_StartingInputResourceAmount);
+                        AddStartingResources(buffer, industrialProcessData.m_Input2.m_Resource, m_StartingInputResourceAmount);
                         bool flag3 = EconomyUtils.IsMaterial(industrialProcessData.m_Output.m_Resource, m_ResourcePrefabs, ref m_ResourceDatas);
-                        AddStartingResources(buffer, industrialProcessData.m_Output.m_Resource, flag3 ? 1000 : 0);
+                        AddStartingResources(buffer, industrialProcessData.m_Output.m_Resource, flag3 ? m_StartingOutputResourceAmount : 0);
                     }
                 }
                 for (int j = 0; j < nativeArray6.Length; j++)
@@ -241,7 +249,9 @@ namespace LeanBusinesses.Systems
             initializeCompanyJob.m_ResourcePrefabs = m_ResourceSystem.GetPrefabs();
             initializeCompanyJob.m_RandomSeed = RandomSeed.Next();
             initializeCompanyJob.m_EconomyParameters = __query_1030701295_0.GetSingleton<EconomyParameterData>();
-            initializeCompanyJob.m_StartingResourceAmount = StartingResourceAmount;
+            initializeCompanyJob.m_StartingInputResourceAmount = StartingInputResourceAmount;
+            initializeCompanyJob.m_StartingOutputResourceAmount = StartingOutputResourceAmount;
+            initializeCompanyJob.m_StartingServiceResourceAmount = StartingServiceResourceAmount;
             InitializeCompanyJob jobData = initializeCompanyJob;
             base.Dependency = JobChunkExtensions.ScheduleParallel(jobData, m_CreatedGroup, base.Dependency);
             m_ResourceSystem.AddPrefabsReader(base.Dependency);

@@ -9,13 +9,15 @@ using Game.UI.Widgets;
 namespace NoTeleporting
 {
     [FileLocation(nameof(NoTeleporting))]
-    [SettingsUIGroupOrder(kProcessorSettings)]
-    [SettingsUIShowGroupName()]
+    [SettingsUIGroupOrder(kProcessorSettings, kServiceCompanies, kServiceBuildings)]
+    [SettingsUIShowGroupName(kProcessorSettings, kServiceCompanies, kServiceBuildings)]
     public class Setting : ModSetting
     {
         public const string kSection = "Main";
 
         public const string kProcessorSettings = "Processing companies";
+        public const string kServiceCompanies = "Service companies";
+        public const string kServiceBuildings = "City services";
 
         public Setting(IMod mod) : base(mod)
         {
@@ -26,9 +28,24 @@ namespace NoTeleporting
         [SettingsUISection(kSection, kProcessorSettings)]
         public int ProcessorStartingResourceAmount { get; set; }
 
+        [SettingsUISlider(min = 0, max = 10000, step = 100, scalarMultiplier = 1, unit = Unit.kWeight)]
+        [SettingsUISection(kSection, kProcessorSettings)]
+        public int ProcessorStartingOutputResourceAmount { get; set; }
+
+        [SettingsUISlider(min = 0, max = 10000, step = 100, scalarMultiplier = 1, unit = Unit.kWeight)]
+        [SettingsUISection(kSection, kServiceCompanies)]
+        public int ServiceStartingResourceAmount { get; set; }
+
+        [SettingsUISlider(min = 0, max = 200, step = 1, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUISection(kSection, kServiceBuildings)]
+        public int ServiceBuildingStartingResourcePercentage { get; set; }
+
         public override void SetDefaults()
         {
             ProcessorStartingResourceAmount = 0;
+            ProcessorStartingOutputResourceAmount = 1000;
+            ServiceStartingResourceAmount = 0;
+            ServiceBuildingStartingResourcePercentage = 100;
         }
     }
 
@@ -46,10 +63,23 @@ namespace NoTeleporting
                 { m_Setting.GetSettingsLocaleID(), "No Teleporting" },
                 { m_Setting.GetOptionTabLocaleID(Setting.kSection), "Main" },
 
-                { m_Setting.GetOptionGroupLocaleID(Setting.kProcessorSettings), "Processing companies" },
+                { m_Setting.GetOptionGroupLocaleID(Setting.kProcessorSettings), "Industrial companies" },
 
-                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.ProcessorStartingResourceAmount)), "Starting resource amount" },
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.ProcessorStartingResourceAmount)), "Starting input resource amount" },
                 { m_Setting.GetOptionDescLocaleID(nameof(Setting.ProcessorStartingResourceAmount)), "The vanilla value is 15 t. Set to 0 to require companies to import resources immediately after spawning." },
+
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.ProcessorStartingOutputResourceAmount)), "Starting output resource amount" },
+                { m_Setting.GetOptionDescLocaleID(nameof(Setting.ProcessorStartingOutputResourceAmount)), "The vanilla value is 1 t." },
+
+                { m_Setting.GetOptionGroupLocaleID(Setting.kServiceCompanies), "Commercial companies" },
+
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.ServiceStartingResourceAmount)), "Starting resource amount" },
+                { m_Setting.GetOptionDescLocaleID(nameof(Setting.ServiceStartingResourceAmount)), "The vanilla value is 3 t. Set to 0 to require companies to import resources immediately after spawning." },
+
+                { m_Setting.GetOptionGroupLocaleID(Setting.kServiceBuildings), "City services" },
+
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.ServiceBuildingStartingResourcePercentage)), "Starting resource amount" },
+                { m_Setting.GetOptionDescLocaleID(nameof(Setting.ServiceBuildingStartingResourcePercentage)), "How many percents of the default initial resource amount is given to each city service building." },
             };
         }
 

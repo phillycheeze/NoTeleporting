@@ -1,10 +1,12 @@
 ﻿using Colossal.IO.AssetDatabase;
 using Colossal.Logging;
 using Game;
+using Game.Buildings;
 using Game.Modding;
 using Game.SceneFlow;
 using Game.Simulation;
 using LeanBusinesses.Systems;
+using NoTeleporting.Systems;
 
 namespace NoTeleporting
 {
@@ -26,13 +28,18 @@ namespace NoTeleporting
 
             updateSystem.UpdateAt<PatchedResourceBuyerSystem>(SystemUpdatePhase.GameSimulation);
             updateSystem.UpdateAt<PatchedCompanyInitializeSystem>(SystemUpdatePhase.Modification5);
+            updateSystem.UpdateAt<PatchedResourcesInitializeSystem>(SystemUpdatePhase.Modification5);
 
             updateSystem.World.GetOrCreateSystemManaged<ResourceBuyerSystem>().Enabled = false;
             updateSystem.World.GetOrCreateSystemManaged<Game.Citizens.CompanyInitializeSystem>().Enabled = false;
+            updateSystem.World.GetOrCreateSystemManaged<ResourcesInitializeSystem>().Enabled = false;
 
             void updateSettings(Game.Settings.Setting _setting)
             {
-                PatchedCompanyInitializeSystem.StartingResourceAmount = m_Setting.ProcessorStartingResourceAmount;
+                PatchedCompanyInitializeSystem.StartingInputResourceAmount = m_Setting.ProcessorStartingResourceAmount;
+                PatchedCompanyInitializeSystem.StartingOutputResourceAmount = m_Setting.ProcessorStartingOutputResourceAmount;
+                PatchedCompanyInitializeSystem.StartingServiceResourceAmount = m_Setting.ServiceStartingResourceAmount;
+                PatchedResourcesInitializeSystem.ServiceBuildingStartingResourcePercentage = 0.01f * m_Setting.ServiceBuildingStartingResourcePercentage;
             }
 
             updateSettings(null);

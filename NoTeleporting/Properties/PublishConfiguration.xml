@@ -1,6 +1,6 @@
 ﻿<Publish>
 	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
-	<ModId Value="" />
+	<ModId Value="86510" />
 	<!--Name of the mod to display to players-->
 	<DisplayName Value="No Teleporting" />
 	<!--Short description of the mod-->
@@ -13,7 +13,7 @@
 Disables teleportation of resources in the following situations:
 
 * When resource is traded, traffic reduction is no longer applied, generating a trip for every trade action
-* Companies will no longer spawn with initial resources, requiring them to buy them before they can start producing goods (can be configured in the options with a custom initial resource amount)
+* Companies and city services will no longer spawn with initial resources, requiring them to buy them before they can start producing goods (can be configured in the options with a custom initial resource amount)
 
 I have tested this mod with a city of 20k population and it works fine. If you have a larger city, please let me know if you encounter any issues.
 
@@ -34,13 +34,13 @@ The thumbnail uses the teleport icon by Lorc licensed under CC BY 3.0 (https://g
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/no-teleporting.1697702/" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.0" />
+	<ModVersion Value="1.1" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.1.7f1" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="" />
+	<ChangeLog Value="Added options for changing initial output resources, commercial company resources, and city service resources" />
 	<!--ChangeLog>
 	</ChangeLog-->
 	<!--External link. supported types are discord, github, youtube, twitch, x, paypal, patreon-->
