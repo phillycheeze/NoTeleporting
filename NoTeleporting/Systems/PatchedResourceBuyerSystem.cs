@@ -138,6 +138,7 @@ namespace LeanBusinesses.Systems
                     {
                         continue;
                     }
+
                     bool flag = (item.m_Flags & SaleFlags.CommercialSeller) != 0;
                     float num = (flag ? EconomyUtils.GetMarketPrice(item.m_Resource, m_ResourcePrefabs, ref m_ResourceDatas) : EconomyUtils.GetIndustrialPrice(item.m_Resource, m_ResourcePrefabs, ref m_ResourceDatas)) * (float)item.m_Amount;
                     if (m_TradeCosts.HasBuffer(item.m_Seller))
@@ -153,21 +154,25 @@ namespace LeanBusinesses.Systems
                         {
                             tradeCost2 = EconomyUtils.GetTradeCost(item.m_Resource, m_TradeCosts[item.m_Buyer]);
                         }
+
                         if (!m_OutsideConnections.HasComponent(item.m_Seller) && (item.m_Flags & SaleFlags.CommercialSeller) != 0)
                         {
                             tradeCost.m_SellCost = math.lerp(tradeCost.m_SellCost, num2 + tradeCost2.m_SellCost, 0.5f);
                             EconomyUtils.SetTradeCost(item.m_Resource, tradeCost, costs, keepLastTime: true);
                         }
+
                         if (m_TradeCosts.HasBuffer(item.m_Buyer) && !m_OutsideConnections.HasComponent(item.m_Buyer))
                         {
                             tradeCost2.m_BuyCost = math.lerp(tradeCost2.m_BuyCost, num2 + tradeCost.m_BuyCost, 0.5f);
                             EconomyUtils.SetTradeCost(item.m_Resource, tradeCost, m_TradeCosts[item.m_Buyer], keepLastTime: true);
                         }
                     }
+
                     if (m_Resources.HasBuffer(item.m_Seller) && EconomyUtils.GetResources(item.m_Resource, m_Resources[item.m_Seller]) <= 0)
                     {
                         continue;
                     }
+
                     TaxSystem.GetIndustrialTaxRate(item.m_Resource, m_TaxRates);
                     if (flag && m_Services.HasComponent(item.m_Seller) && m_PropertyRenters.HasComponent(item.m_Seller))
                     {
@@ -184,6 +189,7 @@ namespace LeanBusinesses.Systems
                         {
                             value.m_MeanPriority = math.min(1f, (float)value.m_ServiceAvailable / (float)serviceCompanyData.m_MaxService);
                         }
+
                         m_Services[item.m_Seller] = value;
                         Entity property = m_PropertyRenters[item.m_Seller].m_Property;
                         if (m_Districts.HasComponent(property))
@@ -196,12 +202,14 @@ namespace LeanBusinesses.Systems
                             TaxSystem.GetCommercialTaxRate(item.m_Resource, m_TaxRates);
                         }
                     }
+
                     if (m_Resources.HasBuffer(item.m_Seller))
                     {
                         DynamicBuffer<Game.Economy.Resources> resources = m_Resources[item.m_Seller];
                         int resources2 = EconomyUtils.GetResources(item.m_Resource, resources);
                         EconomyUtils.AddResources(item.m_Resource, -math.min(resources2, Mathf.RoundToInt(item.m_Amount)), resources);
                     }
+
                     EconomyUtils.AddResources(Resource.Money, -Mathf.RoundToInt(num), m_Resources[item.m_Buyer]);
                     if (m_Households.HasComponent(item.m_Buyer))
                     {
@@ -219,20 +227,24 @@ namespace LeanBusinesses.Systems
                             EconomyUtils.AddResources(item.m_Resource, item.m_Amount, m_Resources[item.m_Buyer]);
                         }
                     }
+
                     if (!m_Storages.HasComponent(item.m_Seller) && m_PropertyRenters.HasComponent(item.m_Seller))
                     {
                         DynamicBuffer<Game.Economy.Resources> resources3 = m_Resources[item.m_Seller];
                         EconomyUtils.AddResources(Resource.Money, Mathf.RoundToInt(num), resources3);
                     }
+
                     if (item.m_Resource != Resource.Vehicles || item.m_Amount != HouseholdBehaviorSystem.kCarAmount || !m_PropertyRenters.HasComponent(item.m_Seller))
                     {
                         continue;
                     }
+
                     Entity property2 = m_PropertyRenters[item.m_Seller].m_Property;
                     if (!m_TransformDatas.HasComponent(property2) || !m_HouseholdCitizens.HasBuffer(item.m_Buyer))
                     {
                         continue;
                     }
+
                     Entity buyer = item.m_Buyer;
                     Game.Objects.Transform transform = m_TransformDatas[property2];
                     int length = m_HouseholdCitizens[buyer].Length;
@@ -249,10 +261,12 @@ namespace LeanBusinesses.Systems
                         passengerAmount = length;
                         num4 = 1 + num3;
                     }
+
                     if (random.NextInt(20) == 0)
                     {
                         num4 += 5;
                     }
+
                     Entity entity = m_PersonalCarSelectData.CreateVehicle(m_CommandBuffer, ref random, passengerAmount, num4, avoidTrailers: true, noSlowVehicles: false, transform, property2, Entity.Null, (PersonalCarFlags)0u, stopped: true);
                     if (entity != Entity.Null)
                     {
@@ -417,8 +431,10 @@ namespace LeanBusinesses.Systems
                         SalesEvent value = salesEvent;
                         m_SalesQueue.Enqueue(value);
                     }
+
                     m_CommandBuffer.RemoveComponent<ResourceBought>(unfilteredChunkIndex, e);
                 }
+
                 for (int j = 0; j < nativeArray2.Length; j++)
                 {
                     ResourceBuyer resourceBuyer = nativeArray2[j];
@@ -430,6 +446,7 @@ namespace LeanBusinesses.Systems
                     {
                         isWeightlessResource = EconomyUtils.GetWeight(resourceBuyer.m_ResourceNeeded, m_ResourcePrefabs, ref m_ResourceDatas) == 0f;
                     }
+
                     if (m_PathInformation.HasComponent(entity))
                     {
                         PathInformation pathInformation = m_PathInformation[entity];
@@ -437,6 +454,7 @@ namespace LeanBusinesses.Systems
                         {
                             continue;
                         }
+
                         Entity destination = pathInformation.m_Destination;
                         if (m_Properties.HasComponent(destination) || m_OutsideConnections.HasComponent(destination))
                         {
@@ -450,10 +468,12 @@ namespace LeanBusinesses.Systems
                                 {
                                     saleFlags |= SaleFlags.Virtual;
                                 }
+
                                 if (m_OutsideConnections.HasComponent(destination))
                                 {
                                     saleFlags |= SaleFlags.ImportFromOC;
                                 }
+
                                 SalesEvent salesEvent = default(SalesEvent);
                                 salesEvent.m_Amount = resourceBuyer.m_AmountNeeded;
                                 salesEvent.m_Buyer = resourceBuyer.m_Payer;
@@ -465,6 +485,9 @@ namespace LeanBusinesses.Systems
                                 m_SalesQueue.Enqueue(value2);
                                 m_CommandBuffer.RemoveComponent(unfilteredChunkIndex, entity, in m_PathfindTypes);
                                 m_CommandBuffer.RemoveComponent<ResourceBuyer>(unfilteredChunkIndex, entity);
+                                
+                                // <REMOVED> logic for traffic reduction flag from original system source.
+
                                 if (!isWeightlessResource)
                                 {
                                     TripNeeded elem = default(TripNeeded);
@@ -487,8 +510,10 @@ namespace LeanBusinesses.Systems
                                 m_CommandBuffer.RemoveComponent(unfilteredChunkIndex, entity, in m_PathfindTypes);
                                 m_CommandBuffer.RemoveComponent<ResourceBuyer>(unfilteredChunkIndex, entity);
                             }
+
                             continue;
                         }
+
                         m_CommandBuffer.RemoveComponent<ResourceBuyer>(unfilteredChunkIndex, entity);
                         m_CommandBuffer.RemoveComponent(unfilteredChunkIndex, entity, in m_PathfindTypes);
                         if (nativeArray5.IsCreated)
@@ -496,7 +521,7 @@ namespace LeanBusinesses.Systems
                             AttendingMeeting attendingMeeting = nativeArray5[j];
                             Entity prefab = m_PrefabRefData[attendingMeeting.m_Meeting].m_Prefab;
                             CoordinatedMeeting value3 = m_CoordinatedMeetings[attendingMeeting.m_Meeting];
-                            if (m_HaveCoordinatedMeetingDatas[prefab][value3.m_Phase].m_Purpose.m_Purpose == Purpose.Shopping)
+                            if (m_HaveCoordinatedMeetingDatas[prefab][value3.m_Phase].m_TravelPurpose.m_Purpose == Purpose.Shopping)
                             {
                                 value3.m_Status = MeetingStatus.Done;
                                 m_CoordinatedMeetings[attendingMeeting.m_Meeting] = value3;
@@ -551,8 +576,9 @@ namespace LeanBusinesses.Systems
                 {
                     humanData = m_PrefabHumanData[entity];
                 }
+
                 PathfindParameters pathfindParameters = default(PathfindParameters);
-                pathfindParameters.m_MaxSpeed = 277.77777f;
+                pathfindParameters.m_MaxSpeed = 277.777771f;
                 pathfindParameters.m_WalkSpeed = humanData.m_WalkSpeed;
                 pathfindParameters.m_Weights = CitizenUtils.GetPathfindWeights(citizenData, householdData, householdCitizenCount);
                 pathfindParameters.m_Methods = PathMethod.Pedestrian | PathMethod.Taxi | RouteUtils.GetPublicTransportMethods(m_TimeOfDay);
@@ -577,6 +603,7 @@ namespace LeanBusinesses.Systems
                 {
                     parameters.m_PathfindFlags |= PathfindFlags.SkipPathfind;
                 }
+
                 if (m_HouseholdMembers.HasComponent(buyer))
                 {
                     Entity household = m_HouseholdMembers[buyer].m_Household;
@@ -585,6 +612,7 @@ namespace LeanBusinesses.Systems
                         parameters.m_Authorization1 = m_Properties[household].m_Property;
                     }
                 }
+
                 if (m_Workers.HasComponent(buyer))
                 {
                     Worker worker = m_Workers[buyer];
@@ -597,6 +625,7 @@ namespace LeanBusinesses.Systems
                         parameters.m_Authorization2 = worker.m_Workplace;
                     }
                 }
+
                 if (m_CarKeepers.IsComponentEnabled(buyer))
                 {
                     Entity car = m_CarKeepers[buyer].m_Car;
@@ -608,7 +637,7 @@ namespace LeanBusinesses.Systems
                         parameters.m_MaxSpeed.x = carData.m_MaxSpeed;
                         parameters.m_ParkingTarget = parkedCar.m_Lane;
                         parameters.m_ParkingDelta = parkedCar.m_CurvePosition;
-                        parameters.m_ParkingLength = VehicleUtils.GetParkingLength(car, ref m_PrefabRefData, ref m_ObjectGeometryData);
+                        parameters.m_ParkingSize = VehicleUtils.GetParkingSize(car, ref m_PrefabRefData, ref m_ObjectGeometryData);
                         parameters.m_Methods |= PathMethod.Road | PathMethod.Parking;
                         parameters.m_IgnoredRules = VehicleUtils.GetIgnoredPathfindRules(carData);
                         if (m_PersonalCarData.TryGetComponent(car, out var componentData) && (componentData.m_State & PersonalCarFlags.HomeTarget) == 0)
@@ -617,6 +646,7 @@ namespace LeanBusinesses.Systems
                         }
                     }
                 }
+
                 SetupQueueItem value = new SetupQueueItem(buyer, parameters, origin, destination);
                 m_PathfindQueue.Enqueue(value);
             }
@@ -653,6 +683,7 @@ namespace LeanBusinesses.Systems
                 {
                     parameters.m_PathfindFlags |= PathfindFlags.SkipPathfind;
                 }
+
                 SetupQueueItem value = new SetupQueueItem(buyer, parameters, origin, destination);
                 m_PathfindQueue.Enqueue(value);
             }
