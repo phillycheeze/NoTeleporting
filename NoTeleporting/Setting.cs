@@ -32,6 +32,10 @@ namespace NoTeleporting
         [SettingsUISection(kSection, kProcessorSettings)]
         public int ProcessorStartingOutputResourceAmount { get; set; }
 
+        [SettingsUISlider(min = 10, max = 500, step = 1, scalarMultiplier = 1, unit = Unit.kPercentage )]
+        [SettingsUISection(kSection, kProcessorSettings)]
+        public int ProcessorEffeciencyFactorAmount { get; set; }
+
         [SettingsUISlider(min = 0, max = 10000, step = 100, scalarMultiplier = 1, unit = Unit.kWeight)]
         [SettingsUISection(kSection, kServiceCompanies)]
         public int ServiceStartingResourceAmount { get; set; }
@@ -44,6 +48,7 @@ namespace NoTeleporting
         {
             ProcessorStartingResourceAmount = 0;
             ProcessorStartingOutputResourceAmount = 1000;
+            ProcessorEffeciencyFactorAmount = 100;
             ServiceStartingResourceAmount = 0;
             ServiceBuildingStartingResourcePercentage = 100;
         }
@@ -70,6 +75,14 @@ namespace NoTeleporting
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.ProcessorStartingOutputResourceAmount)), "Starting output resource amount" },
                 { m_Setting.GetOptionDescLocaleID(nameof(Setting.ProcessorStartingOutputResourceAmount)), "The vanilla value is 1 t." },
+
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.ProcessorEffeciencyFactorAmount)), "Industry efficiency amount" },
+                { m_Setting.GetOptionDescLocaleID(nameof(Setting.ProcessorEffeciencyFactorAmount)), "This adjusts the industrial efficiency of your entire city. The vanilla value is 100%." +
+                "\n" +
+                "Increasing this value will likely:  1) Speed up production of input resources into output resources. 2) Increase industry profits. 3) Increase traffic to/from industry. 4) Lower demand for industry relative to other zoning types." +
+                "\n" +
+                "For example: setting this to 300% will cause all Industry (that processes resources) to convert input resources to output resources 3 times faster."
+                },
 
                 { m_Setting.GetOptionGroupLocaleID(Setting.kServiceCompanies), "Commercial companies" },
 

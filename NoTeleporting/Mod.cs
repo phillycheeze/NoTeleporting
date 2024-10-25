@@ -32,6 +32,7 @@ namespace NoTeleporting
                 updateSystem.UpdateAt<PatchedResourceBuyerSystem>(SystemUpdatePhase.GameSimulation);
                 updateSystem.UpdateAt<PatchedCompanyInitializeSystem>(SystemUpdatePhase.Modification5);
                 updateSystem.UpdateAt<PatchedResourcesInitializeSystem>(SystemUpdatePhase.Modification5);
+                updateSystem.UpdateAt<IndustrialProcessingEffeciencySystem>(SystemUpdatePhase.ModificationEnd);
             }
             catch (System.Exception e)
             {
@@ -62,6 +63,10 @@ namespace NoTeleporting
                 PatchedCompanyInitializeSystem.StartingOutputResourceAmount = m_Setting.ProcessorStartingOutputResourceAmount;
                 PatchedCompanyInitializeSystem.StartingServiceResourceAmount = m_Setting.ServiceStartingResourceAmount;
                 PatchedResourcesInitializeSystem.ServiceBuildingStartingResourcePercentage = 0.01f * m_Setting.ServiceBuildingStartingResourcePercentage;
+
+                IndustrialProcessingEffeciencySystem.IndustrialEfficiencyModifierPercentage = 0.01f * m_Setting.ProcessorEffeciencyFactorAmount;
+                updateSystem.World.GetExistingSystemManaged<IndustrialProcessingEffeciencySystem>().Enabled = true;
+                updateSystem.World.GetExistingSystemManaged<IndustrialProcessingEffeciencySystem>().Update();
                 log.Debug($"Finished applying settings");
             }
 
